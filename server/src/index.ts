@@ -1,23 +1,23 @@
 import fastify, { FastifyReply, FastifyRequest } from 'fastify'
 import cors from '@fastify/cors'
+import { CORS } from './utils'
 
 const app = fastify()
-
-const CORS = {
-  origin: '*',
-  methods: 'GET',
-  preflightContinue: false,
-  optionsSuccessStatus: 204,
-  exposedHeaders: 'Authorization'
-}
 
 app.register(cors, CORS)
 
 const ratesRoute = (_request: FastifyRequest, reply: FastifyReply) => {
-  reply.headers({
+  reply.raw.writeHead(200, {
     'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+    'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept',
+    // The following are vital for SSE to work as expected
+    'Cache-Control': 'no-cache',
+    'Content-Type': 'text/event-stream',
+    'Connection': 'keep-alive'
   })
+
+  // flush the headers to establish SSE with client
+  reply.raw.flushHeaders() 
 
   const interval = setInterval(() => {
     const stock1Rate = Math.floor(Math.random() * 100000)
