@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { formatToCurrency } from "./formatToCurrency"
 
 const API_URL = 'http://localhost:3000'
 
@@ -27,10 +28,10 @@ export function StockApp() {
       <h1>Stock prices:</h1>
       <div>
         {stockData.stock1Rate ? (
-            <p>Stock 1: &#8377{stockData.stock1Rate}</p>
+            <p>Stock 1: {formatToCurrency(stockData.stock1Rate)}</p>
           ) : null}
           {stockData.stock2Rate ? (
-            <p>Stock 2: &#8377{stockData.stock2Rate}</p>
+            <p>Stock 2: {formatToCurrency(stockData.stock2Rate)}</p>
           ) : null}
       </div>
     </div>
